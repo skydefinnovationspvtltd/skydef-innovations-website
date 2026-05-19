@@ -1,0 +1,11 @@
+<svg width="900" height="540" viewBox="0 0 900 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="540" rx="28" fill="#040A15"/>
+  <rect x="34" y="34" width="832" height="472" rx="24" stroke="#4F8CFF" stroke-opacity="0.3"/>
+  <circle cx="450" cy="270" r="170" stroke="#44F3FF" stroke-opacity="0.28"/>
+  <circle cx="450" cy="270" r="120" stroke="#915DFF" stroke-opacity="0.22"/>
+  <path d="M180 270H720" stroke="#44F3FF" stroke-opacity="0.22"/>
+  <path d="M450 100V440" stroke="#44F3FF" stroke-opacity="0.22"/>
+  <path d="M290 255H610L680 210H760L710 260L760 310H680L610 285H290L220 330H140L190 280L140 230H220L290 255Z" fill="#0B1A31" stroke="#44F3FF" stroke-width="3"/>
+  <circle cx="450" cy="270" r="18" fill="#A1FCFF"/>
+  <text x="80" y="92" fill="#EAF6FF" font-family="Arial, sans-serif" font-size="26">UAV PLATFORM PLACEHOLDER</text>
+</svg>
