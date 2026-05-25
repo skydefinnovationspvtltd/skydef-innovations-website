@@ -4,6 +4,8 @@ const navItems = document.querySelectorAll(".nav-links a");
 const revealItems = document.querySelectorAll(".reveal");
 const currentPage = document.body.dataset.page || "index.html";
 const liveSignals = document.querySelectorAll("[data-rotate-text]");
+const typingSignals = document.querySelectorAll("[data-typing-text]");
+const missionDashboards = document.querySelectorAll(".mission-dashboard");
 
 const injectExperienceShell = () => {
     const loader = document.createElement("div");
@@ -121,6 +123,87 @@ liveSignals.forEach((signal) => {
     }, 2400);
 });
 
+typingSignals.forEach((signal) => {
+    const values = (signal.dataset.typingText || "")
+        .split("|")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+    if (!values.length) {
+        return;
+    }
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let pauseUntil = 0;
+
+    const tick = () => {
+        const phrase = values[phraseIndex];
+        const now = Date.now();
+
+        if (now < pauseUntil) {
+            window.setTimeout(tick, 90);
+            return;
+        }
+
+        if (isDeleting) {
+            charIndex = Math.max(0, charIndex - 1);
+        } else {
+            charIndex = Math.min(phrase.length, charIndex + 1);
+        }
+
+        signal.textContent = phrase.slice(0, charIndex);
+
+        if (!isDeleting && charIndex === phrase.length) {
+            isDeleting = true;
+            pauseUntil = now + 1500;
+            window.setTimeout(tick, 90);
+            return;
+        }
+
+        if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % values.length;
+            pauseUntil = now + 250;
+            window.setTimeout(tick, 120);
+            return;
+        }
+
+        window.setTimeout(tick, isDeleting ? 28 : 52);
+    };
+
+    signal.textContent = "";
+    tick();
+});
+
+missionDashboards.forEach((dashboard) => {
+    const resetParallax = () => {
+        dashboard.style.setProperty("--parallax-x", "0px");
+        dashboard.style.setProperty("--parallax-y", "0px");
+    };
+
+    dashboard.addEventListener("pointermove", (event) => {
+        if (window.innerWidth < 1024) {
+            resetParallax();
+            return;
+        }
+
+        const rect = dashboard.getBoundingClientRect();
+        const offsetX = ((event.clientX - rect.left) / rect.width - 0.5) * 18;
+        const offsetY = ((event.clientY - rect.top) / rect.height - 0.5) * 18;
+        dashboard.style.setProperty("--parallax-x", `${offsetX.toFixed(2)}px`);
+        dashboard.style.setProperty("--parallax-y", `${offsetY.toFixed(2)}px`);
+    });
+
+    dashboard.addEventListener("pointerleave", resetParallax);
+    window.addEventListener("resize", () => {
+        if (window.innerWidth < 1024) {
+            resetParallax();
+        }
+    });
+});
+
 document.querySelectorAll("a[href$='.html']").forEach((link) => {
     link.addEventListener("click", (event) => {
         const href = link.getAttribute("href");
@@ -140,7 +223,7 @@ document.querySelectorAll("a[href$='.html']").forEach((link) => {
 });
 
 window.addEventListener("resize", () => {
-    if (window.innerWidth > 760) {
+    if (window.innerWidth >= 1024) {
         closeMenu();
     }
 });
@@ -152,6 +235,9 @@ window.addEventListener("load", () => {
     if (loader) {
         window.setTimeout(() => {
             loader.classList.add("loader-hidden");
-        }, 1100);
+            window.setTimeout(() => {
+                loader.remove();
+            }, 900);
+        }, 900);
     }
 });
