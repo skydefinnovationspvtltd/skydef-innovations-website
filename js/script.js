@@ -6,8 +6,13 @@ const currentPage = document.body.dataset.page || "index.html";
 const liveSignals = document.querySelectorAll("[data-rotate-text]");
 const typingSignals = document.querySelectorAll("[data-typing-text]");
 const missionDashboards = document.querySelectorAll(".mission-dashboard");
+const mobileMotionQuery = window.matchMedia("(max-width: 768px)");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+const useLightMotion = () => mobileMotionQuery.matches || reducedMotionQuery.matches;
 
 const injectExperienceShell = () => {
+    const lightMotion = useLightMotion();
     const loader = document.createElement("div");
     loader.className = "cinematic-loader";
     loader.innerHTML = `
@@ -34,12 +39,12 @@ const injectExperienceShell = () => {
     const particles = document.createElement("div");
     particles.className = "particle-field";
 
-    for (let i = 0; i < 28; i += 1) {
+    for (let i = 0; i < (lightMotion ? 8 : 28); i += 1) {
         const particle = document.createElement("span");
         particle.style.setProperty("--x", `${Math.random() * 100}%`);
         particle.style.setProperty("--size", `${2 + Math.random() * 5}px`);
-        particle.style.setProperty("--delay", `${Math.random() * 8}s`);
-        particle.style.setProperty("--duration", `${8 + Math.random() * 10}s`);
+        particle.style.setProperty("--delay", `${Math.random() * (lightMotion ? 3 : 8)}s`);
+        particle.style.setProperty("--duration", `${(lightMotion ? 14 : 8) + Math.random() * (lightMotion ? 6 : 10)}s`);
         particle.style.setProperty("--drift", `${-60 + Math.random() * 120}px`);
         particles.appendChild(particle);
     }
@@ -115,6 +120,11 @@ liveSignals.forEach((signal) => {
         return;
     }
 
+    if (useLightMotion()) {
+        signal.textContent = values[0];
+        return;
+    }
+
     let index = 0;
 
     window.setInterval(() => {
@@ -130,6 +140,11 @@ typingSignals.forEach((signal) => {
         .filter(Boolean);
 
     if (!values.length) {
+        return;
+    }
+
+    if (useLightMotion()) {
+        signal.textContent = values[0];
         return;
     }
 
@@ -183,8 +198,13 @@ missionDashboards.forEach((dashboard) => {
         dashboard.style.setProperty("--parallax-y", "0px");
     };
 
+    if (useLightMotion()) {
+        resetParallax();
+        return;
+    }
+
     dashboard.addEventListener("pointermove", (event) => {
-        if (window.innerWidth < 1024) {
+        if (useLightMotion() || window.innerWidth < 1024) {
             resetParallax();
             return;
         }
@@ -198,7 +218,7 @@ missionDashboards.forEach((dashboard) => {
 
     dashboard.addEventListener("pointerleave", resetParallax);
     window.addEventListener("resize", () => {
-        if (window.innerWidth < 1024) {
+        if (useLightMotion() || window.innerWidth < 1024) {
             resetParallax();
         }
     });

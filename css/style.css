@@ -1302,6 +1302,8 @@ p {
         radial-gradient(circle at 50% 40%, rgba(82, 246, 255, 0.14), transparent 22%),
         radial-gradient(circle at 62% 18%, rgba(150, 178, 255, 0.12), transparent 20%),
         linear-gradient(180deg, rgba(6, 14, 28, 0.72) 0%, rgba(7, 17, 32, 0.78) 18%, rgba(10, 18, 28, 0.9) 55%, rgba(5, 10, 18, 0.98) 100%);
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .sky-layer,
@@ -1439,6 +1441,8 @@ p {
     filter: blur(2px);
     opacity: 0.7;
     animation: scanBeamMove 5.8s ease-in-out infinite;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
 }
 
 .signal-wave {
@@ -1482,6 +1486,8 @@ p {
     z-index: 2;
     filter: drop-shadow(0 0 10px rgba(82, 246, 255, 0.12));
     animation: armShift 5.5s ease-in-out infinite;
+    backface-visibility: hidden;
+    will-change: transform;
 }
 
 .arm-base,
@@ -1628,12 +1634,16 @@ p {
     left: 39%;
     bottom: 19%;
     animation: soldierWalk 4.4s ease-in-out infinite;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
 }
 
 .soldier-b {
     right: 38%;
     bottom: 21%;
     animation: soldierWalk 4.4s ease-in-out infinite 0.8s;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
 }
 
 .data-widget {
@@ -1815,6 +1825,8 @@ p {
     transform: translate(-50%, -50%);
     animation: droneHover 6s ease-in-out infinite;
     z-index: 4;
+    backface-visibility: hidden;
+    will-change: transform;
 }
 
 .drone-glow {
@@ -3390,5 +3402,260 @@ p {
 
     .mini-stat-value {
         font-size: 1.35rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body,
+    body::before,
+    body::after,
+    .ambient::before,
+    .ambient::after,
+    .circuit-overlay::before,
+    .circuit-overlay::after,
+    .hud-overlay::before,
+    .hud-overlay::after,
+    .glass-card::before,
+    .glass-card::after,
+    .command-panel::before,
+    .command-panel::after,
+    .stat-panel::before,
+    .stat-panel::after,
+    .system-panel::before,
+    .system-panel::after,
+    .mission-board::before,
+    .mission-board::after,
+    .contact-card::before,
+    .contact-card::after,
+    .contact-form::before,
+    .contact-form::after,
+    .domain-card::before,
+    .domain-card::after,
+    .service-card::before,
+    .service-card::after,
+    .sector-card::before,
+    .sector-card::after,
+    .mini-panel::before,
+    .mini-panel::after,
+    .capability-card::before,
+    .capability-card::after,
+    .flow-card::before,
+    .flow-card::after,
+    .timeline-card::before,
+    .timeline-card::after,
+    .signal-card::before,
+    .signal-card::after,
+    .lab-card::before,
+    .lab-card::after,
+    .info-card::before,
+    .info-card::after,
+    .feature-panel::before,
+    .feature-panel::after,
+    .mission-stage::after,
+    .systems-map::after,
+    .lab-stage::after,
+    .service-stage::after,
+    .sector-stage::after,
+    .contact-stage::after,
+    .about-stage::after,
+    .visual-frame::after,
+    .hero-hud::after {
+        animation: none !important;
+    }
+
+    body {
+        animation: none;
+        transition: opacity 0.35s ease;
+    }
+
+    body::after,
+    .circuit-overlay::after,
+    .hud-overlay::before,
+    .hud-overlay::after,
+    .particle-field {
+        display: none;
+    }
+
+    .ambient::before,
+    .ambient::after {
+        filter: blur(34px);
+        opacity: 0.16;
+    }
+
+    .grid-overlay,
+    .circuit-overlay,
+    .hud-overlay {
+        opacity: 0.12;
+    }
+
+    .site-header,
+    .glass-card,
+    .command-panel,
+    .stat-panel,
+    .system-panel,
+    .mission-board,
+    .contact-card,
+    .contact-form,
+    .domain-card,
+    .service-card,
+    .sector-card,
+    .mini-panel,
+    .capability-card,
+    .flow-card,
+    .timeline-card,
+    .signal-card,
+    .lab-card,
+    .info-card,
+    .feature-panel,
+    .data-widget {
+        backdrop-filter: none;
+    }
+
+    .glass-card,
+    .command-panel,
+    .stat-panel,
+    .system-panel,
+    .mission-board,
+    .contact-card,
+    .contact-form,
+    .domain-card,
+    .service-card,
+    .sector-card,
+    .mini-panel,
+    .capability-card,
+    .flow-card,
+    .timeline-card,
+    .signal-card,
+    .lab-card,
+    .info-card,
+    .feature-panel,
+    .data-widget,
+    .status-chip,
+    .nav-code span,
+    .visual-tag,
+    .btn,
+    .brand,
+    .brand-mark,
+    .hud-ring,
+    .radar-sweep,
+    .drone-glow,
+    .drone-prop,
+    .flight-path,
+    .target-lock {
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    .mission-dashboard,
+    .drone-shell,
+    .scan-beam,
+    .robotic-arm,
+    .soldier-a,
+    .soldier-b,
+    .data-widget,
+    .sky-layer,
+    .mountain-back,
+    .mountain-mid,
+    .mountain-front,
+    .terrain-grid {
+        transform: translate3d(0, 0, 0) !important;
+    }
+
+    .drone-shell {
+        animation: droneHover 18s ease-in-out infinite;
+    }
+
+    .robotic-arm,
+    .soldier-a,
+    .soldier-b,
+    .radar-sweep,
+    .scan-beam,
+    .wave-a,
+    .wave-b,
+    .satellite-orbit,
+    .ring-2,
+    .ring-3,
+    .ring-4,
+    .flight-path::after,
+    .path-a,
+    .path-b,
+    .path-c,
+    .target-lock {
+        animation: none !important;
+    }
+
+    .ring-1 {
+        animation: pulseScale 14s ease-in-out infinite;
+    }
+
+    .mission-stage,
+    .hero-console,
+    .hero-visual,
+    .hero-copy {
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-overlay,
+    .circuit-overlay,
+    .hud-overlay {
+        opacity: 0.08;
+    }
+
+    .ambient::before,
+    .ambient::after {
+        opacity: 0.1;
+        filter: blur(26px);
+    }
+
+    .hero-console,
+    .mission-stage {
+        border-color: rgba(82, 246, 255, 0.14);
+    }
+
+    .widget-a,
+    .widget-b,
+    .coord-a,
+    .ring-1,
+    .drone-glow {
+        opacity: 0.78;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    body,
+    body::before,
+    body::after,
+    .ambient::before,
+    .ambient::after,
+    .particle-field,
+    .circuit-overlay::before,
+    .circuit-overlay::after,
+    .hud-overlay::before,
+    .hud-overlay::after,
+    .mission-stage::after,
+    .systems-map::after,
+    .lab-stage::after,
+    .service-stage::after,
+    .sector-stage::after,
+    .contact-stage::after,
+    .about-stage::after,
+    .visual-frame::after,
+    .hero-hud::after {
+        animation: none !important;
     }
 }
