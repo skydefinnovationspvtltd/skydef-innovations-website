@@ -32,7 +32,7 @@ const injectExperienceShell = () => {
     const particles = document.createElement("div");
     particles.className = "particle-field";
 
-    for (let i = 0; i < 26; i += 1) {
+    for (let i = 0; i < 28; i += 1) {
         const particle = document.createElement("span");
         particle.style.setProperty("--x", `${Math.random() * 100}%`);
         particle.style.setProperty("--size", `${2 + Math.random() * 5}px`);
@@ -49,9 +49,23 @@ const injectExperienceShell = () => {
 
 injectExperienceShell();
 
+const closeMenu = () => {
+    if (navLinks) {
+        navLinks.classList.remove("open");
+    }
+
+    if (menuToggle) {
+        menuToggle.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+    }
+};
+
 if (menuToggle && navLinks) {
+    menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.addEventListener("click", () => {
         navLinks.classList.toggle("open");
+        menuToggle.classList.toggle("active");
+        menuToggle.setAttribute("aria-expanded", navLinks.classList.contains("open") ? "true" : "false");
     });
 }
 
@@ -60,22 +74,34 @@ navItems.forEach((item) => {
         item.classList.add("active");
     }
 
-    item.addEventListener("click", () => {
-        if (navLinks) {
-            navLinks.classList.remove("open");
-        }
-    });
+    item.addEventListener("click", closeMenu);
 });
 
-const revealOnScroll = () => {
-    revealItems.forEach((item) => {
-        const top = item.getBoundingClientRect().top;
+if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
 
-        if (top < window.innerHeight - 90) {
-            item.classList.add("visible");
-        }
-    });
-};
+    revealItems.forEach((item) => observer.observe(item));
+} else {
+    const revealOnScroll = () => {
+        revealItems.forEach((item) => {
+            const top = item.getBoundingClientRect().top;
+
+            if (top < window.innerHeight - 90) {
+                item.classList.add("visible");
+            }
+        });
+    };
+
+    window.addEventListener("scroll", revealOnScroll);
+    window.addEventListener("load", revealOnScroll);
+}
 
 liveSignals.forEach((signal) => {
     const values = (signal.dataset.rotateText || "")
@@ -105,6 +131,7 @@ document.querySelectorAll("a[href$='.html']").forEach((link) => {
 
         event.preventDefault();
         document.body.classList.add("page-leaving");
+        closeMenu();
 
         window.setTimeout(() => {
             window.location.href = href;
@@ -112,8 +139,13 @@ document.querySelectorAll("a[href$='.html']").forEach((link) => {
     });
 });
 
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 760) {
+        closeMenu();
+    }
+});
+
 window.addEventListener("load", () => {
-    revealOnScroll();
     document.body.classList.add("page-ready");
 
     const loader = document.querySelector(".cinematic-loader");
@@ -123,5 +155,3 @@ window.addEventListener("load", () => {
         }, 1100);
     }
 });
-
-window.addEventListener("scroll", revealOnScroll);
